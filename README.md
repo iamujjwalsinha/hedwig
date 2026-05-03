@@ -14,6 +14,10 @@ npm run dev:5050   # use if port 5000 is taken (e.g. macOS AirPlay)
 
 Production: set `NEXT_PUBLIC_SITE_URL` for canonical/OG metadata (see `.env.example`).
 
+## Vercel
+
+In the Vercel project, add the same variables as `.env.example` (**Production** and **Preview** as needed). If the site returns **401** and you are not prompted for your app—only Vercel login—open **Project → Settings → Deployment Protection** and turn protection **off** for Production (or use “Only Preview”), so visitors can load hedwig without a Vercel account. The global hostname `hedwig.vercel.app` may belong to another project; use the domain shown under your deployment’s **Domains**.
+
 ## About this repository
 
 Maintained by **[Your Name](https://github.com/iamujjwalsinha** — replace with your name and profile link.  
