@@ -2,26 +2,31 @@
 
 import { useState } from "react";
 import { generateKey, encryptSecret, exportKeyToFragment } from "@/lib/crypto";
+import {
+  DEFAULT_TTL_SECONDS,
+  type AllowedTtlSeconds,
+} from "@/lib/ttl";
+import { BRAND, fontDisplay } from "@/lib/brand";
 
-const TTL_OPTIONS = [
+const TTL_OPTIONS: { label: string; value: AllowedTtlSeconds }[] = [
   { label: "15 minutes", value: 900 },
   { label: "30 minutes", value: 1800 },
   { label: "45 minutes", value: 2700 },
   { label: "1 hour", value: 3600 },
 ];
 
-const GREEN = "#034F46";
-const BG = "#FFFFEB";
-const CARD_BG = "#F4F4E0";
-const BORDER = "#D8D8C8";
-const TEXT = "#1A1A1A";
+const GREEN = BRAND.accent;
+const BG = BRAND.background;
+const CARD_BG = BRAND.cardBg;
+const BORDER = BRAND.border;
+const TEXT = BRAND.text;
 
 type Step = "write" | "preview" | "done";
 
 export default function SecretForm() {
   const [step, setStep] = useState<Step>("write");
   const [plaintext, setPlaintext] = useState("");
-  const [ttl, setTtl] = useState(86400);
+  const [ttl, setTtl] = useState<AllowedTtlSeconds>(DEFAULT_TTL_SECONDS);
   const [burnOnRead, setBurnOnRead] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -137,7 +142,9 @@ export default function SecretForm() {
               </label>
               <select
                 value={ttl}
-                onChange={(e) => setTtl(Number(e.target.value))}
+                onChange={(e) =>
+                  setTtl(Number(e.target.value) as AllowedTtlSeconds)
+                }
                 style={{
                   width: "100%",
                   backgroundColor: BG,
@@ -227,7 +234,7 @@ export default function SecretForm() {
       {step === "preview" && (
         <div className="space-y-5 animate-fade-in">
           <div>
-            <h2 className="text-lg font-semibold mb-1" style={{ fontFamily: "'Bricolage Grotesque', sans-serif", color: TEXT }}>
+            <h2 className="text-lg font-semibold mb-1" style={{ fontFamily: fontDisplay(), color: TEXT }}>
               Review your secret
             </h2>
             <p className="text-sm" style={{ color: TEXT, opacity: 0.55 }}>
@@ -247,13 +254,32 @@ export default function SecretForm() {
             <pre style={{
               padding: "14px 16px", fontSize: "13px",
               fontFamily: "'JetBrains Mono', monospace", color: TEXT,
-              whiteSpace: "pre-wrap", wordBreak: "break-words",
+              whiteSpace: "pre-wrap", wordBreak: "break-word",
               maxHeight: "180px", overflowY: "auto", lineHeight: "1.6",
               margin: 0,
             }}>
               {plaintext}
             </pre>
           </div>
+
+          {burnOnRead && (
+            <div
+              style={{
+                backgroundColor: `${GREEN}10`,
+                border: `1px solid ${GREEN}35`,
+                borderRadius: "10px",
+                padding: "14px 16px",
+                fontSize: "13px",
+                color: TEXT,
+                lineHeight: 1.55,
+              }}
+            >
+              <strong style={{ color: GREEN }}>Burn after reading is on.</strong>{" "}
+              The ciphertext is deleted from our database as soon as someone
+              loads this link successfully. Forward the link carefully; opening
+              it in a preview or unread bot may consume it.
+            </div>
+          )}
 
           <div style={{ backgroundColor: BG, border: `1px solid ${BORDER}`, borderRadius: "10px", padding: "14px 16px" }} className="space-y-2">
             {[
@@ -310,11 +336,11 @@ export default function SecretForm() {
         <div className="space-y-5 animate-fade-in">
           <div className="text-center">
             <div className="text-3xl mb-3">🦉</div>
-            <h2 className="text-xl font-semibold mb-1" style={{ fontFamily: "'Bricolage Grotesque', sans-serif", color: TEXT }}>
-              Hedwig is on her way
+            <h2 className="text-xl font-semibold mb-1" style={{ fontFamily: fontDisplay(), color: TEXT }}>
+              hedwig is on the way
             </h2>
             <p className="text-sm" style={{ color: TEXT, opacity: 0.55 }}>
-              Your secret has been sealed. Share the link below — the decryption key flies only in the <code style={{ color: GREEN }}>#fragment</code>, never through our servers.
+              Your secret is sealed. Share the link below — the decryption key lives only in the <code style={{ color: GREEN }}>#fragment</code>, never on hedwig&apos;s servers.
             </p>
           </div>
 

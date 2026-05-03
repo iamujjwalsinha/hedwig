@@ -2,12 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { importKeyFromFragment, decryptSecret } from "@/lib/crypto";
+import { BRAND, fontDisplay } from "@/lib/brand";
 
-const GREEN = "#034F46";
-const BG = "#FFFFEB";
-const CARD_BG = "#F4F4E0";
-const BORDER = "#D8D8C8";
-const TEXT = "#1A1A1A";
+const GREEN = BRAND.accent;
+const BG = BRAND.background;
+const CARD_BG = BRAND.cardBg;
+const BORDER = BRAND.border;
+const TEXT = BRAND.text;
 
 type State =
   | { status: "loading" }
@@ -79,7 +80,7 @@ export default function SecretViewer({ id }: { id: string }) {
     return (
       <div style={{ ...cardStyle, border: `1px solid #FCA5A5`, backgroundColor: "#FFF5F5" }}>
         <div className="text-3xl mb-3">🔑</div>
-        <h2 className="font-semibold mb-2" style={{ fontFamily: "'Bricolage Grotesque', sans-serif", color: TEXT }}>
+        <h2 className="font-semibold mb-2" style={{ fontFamily: fontDisplay(), color: TEXT }}>
           Missing decryption key
         </h2>
         <p className="text-sm" style={{ color: TEXT, opacity: 0.6 }}>
@@ -94,7 +95,7 @@ export default function SecretViewer({ id }: { id: string }) {
     return (
       <div style={cardStyle}>
         <div className="text-3xl mb-3">💨</div>
-        <h2 className="font-semibold mb-2" style={{ fontFamily: "'Bricolage Grotesque', sans-serif", color: TEXT }}>
+        <h2 className="font-semibold mb-2" style={{ fontFamily: fontDisplay(), color: TEXT }}>
           Secret not found
         </h2>
         <p className="text-sm mb-4" style={{ color: TEXT, opacity: 0.55 }}>
@@ -111,7 +112,7 @@ export default function SecretViewer({ id }: { id: string }) {
     return (
       <div style={{ ...cardStyle, border: `1px solid #FCA5A5`, backgroundColor: "#FFF5F5" }}>
         <div className="text-3xl mb-3">⚠️</div>
-        <h2 className="font-semibold mb-2" style={{ fontFamily: "'Bricolage Grotesque', sans-serif", color: TEXT }}>
+        <h2 className="font-semibold mb-2" style={{ fontFamily: fontDisplay(), color: TEXT }}>
           Decryption failed
         </h2>
         <p className="text-sm" style={{ color: TEXT, opacity: 0.6 }}>{state.message}</p>
@@ -135,27 +136,40 @@ export default function SecretViewer({ id }: { id: string }) {
       )}
 
       <div style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}`, borderRadius: "16px", padding: "24px" }}>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-medium" style={{ color: TEXT, opacity: 0.5 }}>
+        <div className="flex items-start justify-between gap-4 mb-4">
+          <h2 className="text-sm font-medium shrink-0" style={{ color: TEXT, opacity: 0.5 }}>
             Decrypted message
           </h2>
-          <button
-            onClick={copyPlaintext}
-            style={{
-              padding: "6px 14px", backgroundColor: GREEN, color: "#FFFFEB",
-              fontSize: "12px", fontWeight: 600, borderRadius: "8px",
-              border: "none", cursor: "pointer", transition: "opacity 0.15s",
-            }}
-            onMouseOver={(e) => (e.currentTarget.style.opacity = "0.85")}
-            onMouseOut={(e) => (e.currentTarget.style.opacity = "1")}
-          >
-            {copied ? "Copied!" : "Copy"}
-          </button>
+          <div className="flex flex-col items-end gap-1 min-w-0">
+            <button
+              type="button"
+              onClick={copyPlaintext}
+              style={{
+                padding: "6px 14px", backgroundColor: GREEN, color: "#FFFFEB",
+                fontSize: "12px", fontWeight: 600, borderRadius: "8px",
+                border: "none", cursor: "pointer", transition: "opacity 0.15s",
+                flexShrink: 0,
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.opacity = "0.85")}
+              onMouseOut={(e) => (e.currentTarget.style.opacity = "1")}
+              aria-live="polite"
+            >
+              {copied ? "Copied!" : "Copy"}
+            </button>
+            {copied && (
+              <p
+                className="text-xs text-right leading-snug m-0"
+                style={{ color: TEXT, opacity: 0.6, maxWidth: "14rem" }}
+              >
+                Clear clipboard when you&apos;re finished if others use this device.
+              </p>
+            )}
+          </div>
         </div>
         <pre style={{
           fontFamily: "'JetBrains Mono', 'Courier New', monospace",
           fontSize: "13px", color: TEXT, whiteSpace: "pre-wrap",
-          wordBreak: "break-words", lineHeight: "1.7",
+          wordBreak: "break-word", lineHeight: "1.7",
           backgroundColor: BG, border: `1px solid ${BORDER}`,
           borderRadius: "10px", padding: "16px",
           maxHeight: "380px", overflowY: "auto", margin: 0,
@@ -171,7 +185,7 @@ export default function SecretViewer({ id }: { id: string }) {
         onMouseOver={(e) => (e.currentTarget.style.opacity = "0.75")}
         onMouseOut={(e) => (e.currentTarget.style.opacity = "0.45")}
       >
-        Share your own secret with hedwig →
+        Share a secret with hedwig →
       </a>
     </div>
   );

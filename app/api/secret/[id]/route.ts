@@ -1,28 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSecret, deleteSecret } from "@/lib/db";
+import { fetchAndConsumeSecret } from "@/lib/db";
+import { limitSecretGet } from "@/lib/ratelimit";
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const rate = await limitSecretGet(request);
+  if (!rate.ok) return rate.response;
+
   try {
     const { id } = params;
 
-    if (!id || typeof id !== "string") {
+    if (!id || typeof id !== "string" || id.length > 64) {
       return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
     }
 
-    const secret = await getSecret(id);
+    const secret = await fetchAndConsumeSecret(id);
 
     if (!secret) {
       return NextResponse.json(
         { error: "Secret not found or expired" },
         { status: 404 }
       );
-    }
-
-    if (secret.burnOnRead) {
-      await deleteSecret(id);
     }
 
     return NextResponse.json({
