@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { generateKey, encryptSecret, exportKeyToFragment } from "@/lib/crypto";
 import {
   DEFAULT_TTL_SECONDS,
@@ -32,6 +32,12 @@ export default function SecretForm() {
   const [error, setError] = useState("");
   const [generatedLink, setGeneratedLink] = useState("");
   const [copied, setCopied] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (step !== "done") return;
+    cardRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [step]);
 
   const ttlLabel = TTL_OPTIONS.find((o) => o.value === ttl)?.label ?? "";
   const charCount = plaintext.length;
@@ -51,6 +57,12 @@ export default function SecretForm() {
     setLoading(true);
     setError("");
     try {
+      if (!window.isSecureContext || !globalThis.crypto?.subtle) {
+        throw new Error(
+          "Encryption needs a secure context (https or localhost). Open this site over HTTPS."
+        );
+      }
+
       const key = await generateKey();
       const { ciphertext, iv } = await encryptSecret(plaintext, key);
       const keyFragment = await exportKeyToFragment(key);
@@ -61,12 +73,40 @@ export default function SecretForm() {
         body: JSON.stringify({ ciphertext, iv, burnOnRead, ttl }),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to store secret");
+      let data: unknown;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error(
+          res.ok
+            ? "Invalid response from server."
+            : `Request failed (${res.status}).`
+        );
       }
 
-      const { id } = await res.json();
+      if (!res.ok) {
+        const msg =
+          typeof data === "object" &&
+          data !== null &&
+          "error" in data &&
+          typeof (data as { error: unknown }).error === "string"
+            ? (data as { error: string }).error
+            : "Failed to store secret";
+        throw new Error(msg);
+      }
+
+      const id =
+        typeof data === "object" &&
+        data !== null &&
+        "id" in data &&
+        typeof (data as { id: unknown }).id === "string"
+          ? (data as { id: string }).id
+          : null;
+
+      if (!id) {
+        throw new Error("Server did not return a secret id.");
+      }
+
       setGeneratedLink(`${window.location.origin}/s/${id}#${keyFragment}`);
       setStep("done");
     } catch (err: unknown) {
@@ -96,7 +136,10 @@ export default function SecretForm() {
   }
 
   return (
-    <div style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}`, borderRadius: "16px", padding: "28px" }}>
+    <div
+      ref={cardRef}
+      style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}`, borderRadius: "16px", padding: "28px" }}
+    >
 
       {/* ── STEP 1: Write ── */}
       {step === "write" && (
@@ -302,6 +345,7 @@ export default function SecretForm() {
 
           <div className="flex gap-3">
             <button
+              type="button"
               onClick={() => setStep("write")}
               disabled={loading}
               style={{
@@ -314,6 +358,7 @@ export default function SecretForm() {
               ← Edit
             </button>
             <button
+              type="button"
               onClick={handleEncrypt}
               disabled={loading}
               style={{
@@ -359,6 +404,7 @@ export default function SecretForm() {
                 }}
               />
               <button
+                type="button"
                 onClick={copyLink}
                 style={{
                   padding: "10px 18px", backgroundColor: GREEN, color: "#FFFFEB",
@@ -387,6 +433,7 @@ export default function SecretForm() {
           </div>
 
           <button
+            type="button"
             onClick={reset}
             style={{
               width: "100%", border: `1px solid ${BORDER}`, backgroundColor: "transparent",

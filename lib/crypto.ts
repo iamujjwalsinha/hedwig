@@ -21,7 +21,8 @@ export async function encryptSecret(
 
   return {
     ciphertext: arrayBufferToBase64(encrypted),
-    iv: arrayBufferToBase64(iv.buffer),
+    // Copy IV bytes — iv.buffer can be larger than 12 bytes (shared backing store).
+    iv: arrayBufferToBase64(new Uint8Array(iv).buffer),
   };
 }
 
