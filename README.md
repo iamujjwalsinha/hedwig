@@ -16,7 +16,7 @@ Production: set `NEXT_PUBLIC_SITE_URL` for canonical/OG metadata (see `.env.exam
 
 ## About this repository
 
-Maintained by **[Your Name](https://github.com/YOUR_USERNAME)** — replace with your name and profile link.  
+Maintained by **[Your Name](https://github.com/iamujjwalsinha** — replace with your name and profile link.  
 PRs and issues welcome; describe security-sensitive findings responsibly (private disclosure if appropriate).
 
 ## Scripts
