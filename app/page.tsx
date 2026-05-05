@@ -10,7 +10,9 @@ export default function Home() {
             hedwig
           </h1>
           <p className="text-base leading-relaxed" style={{ color: BRAND.text, opacity: 0.6 }}>
-            {BRAND.tagline}
+            {BRAND.taglineFirst}
+            <br />
+            {BRAND.taglineSecond}
             <br />
             Encrypted in your browser. The server never sees your plaintext.
           </p>
