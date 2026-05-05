@@ -22,7 +22,7 @@ Production: set `NEXT_PUBLIC_SITE_URL` for canonical/OG metadata (see `.env.exam
 
 Locally, `npx vercel link` targets this repo to the linked project (`.vercel/` is gitignored).
 
-If the site returns **401** and you only see a Vercel sign-in—open **Project → Settings → Deployment Protection** and turn protection **off** for Production (or protect **Preview** only). The hostname `hedwig.vercel.app` can point at a different project; always use the domain under your deployment’s **Domains**.
+If the site returns **401** and you only see a Vercel sign-in, open **Project → Settings → Deployment Protection** and turn protection **off** for Production (or protect **Preview** only). The hostname `hedwig.vercel.app` can point at a different project; always use the domain under your deployment’s **Domains**.
 
 ## About this repository
 
@@ -31,6 +31,6 @@ PRs and issues welcome; describe security-sensitive findings responsibly (privat
 
 ## Scripts
 
-- `npm run build` / `npm start` — production
-- `npm run lint` — ESLint
-- `npm run verify:burn` — burn-after-read concurrency smoke test (see script header)
+- `npm run build` / `npm start` (production)
+- `npm run lint` (ESLint)
+- `npm run verify:burn` (burn-after-read concurrency smoke test; see script header)

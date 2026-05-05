@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { BRAND } from "@/lib/brand";
 import {
@@ -29,7 +29,7 @@ const openGraphExtras = siteMetadataBase
           url: ogImagePath,
           width: 1200,
           height: 630,
-          alt: "hedwig — encrypted one-time link to share a secret once",
+          alt: "hedwig: encrypted one-time link to share a secret once",
         },
       ],
     }
@@ -41,11 +41,23 @@ const twitterExtras = siteMetadataBase
     }
   : {};
 
+export const viewport: Viewport = {
+  themeColor: BRAND.accent,
+};
+
 export const metadata: Metadata = {
   ...(siteMetadataBase ? { metadataBase: siteMetadataBase } : {}),
   title: { default: siteTitle, template: "%s · hedwig" },
   description: siteDescription,
   keywords: metadataKeywords,
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   robots: { index: true, follow: true },
   openGraph: {
     title: siteTitle,

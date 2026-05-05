@@ -12,7 +12,7 @@ export default function Home() {
           <p className="text-base leading-relaxed" style={{ color: BRAND.text, opacity: 0.6 }}>
             {BRAND.tagline}
             <br />
-            Encrypted in your browser — the server never sees your plaintext.
+            Encrypted in your browser. The server never sees your plaintext.
           </p>
         </div>
         <SecretForm />

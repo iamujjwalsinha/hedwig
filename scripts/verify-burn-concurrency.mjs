@@ -3,9 +3,9 @@
  * Smoke test: concurrent GETs against a burn-on-read secret must yield at most one 200.
  *
  * Prerequisites:
- *   - Next app running (npm run dev, or npm run dev:5050 if port 5000 is taken — e.g. macOS AirPlay)
+ *   - Next app running (npm run dev, or npm run dev:5050 if port 5000 is taken, e.g. macOS AirPlay)
  *   - .env or .env.local with NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY
- *     (same values the server uses — script inserts a row directly, then curls the API)
+ *     (same values the server uses: script inserts a row directly, then curls the API)
  *
  * Usage:
  *   TEST_API_URL=http://127.0.0.1:5050 node scripts/verify-burn-concurrency.mjs
@@ -116,7 +116,7 @@ async function main() {
     process.exit(1);
   }
 
-  console.log("OK — burn-after-read behaved atomically under parallel GETs.");
+  console.log("OK: burn-after-read behaved atomically under parallel GETs.");
 }
 
 main().catch((e) => {

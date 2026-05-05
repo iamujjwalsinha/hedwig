@@ -1,7 +1,7 @@
-/** Central SEO copy — keep layout metadata and homepage messaging aligned. */
+/** Central SEO copy: keep layout metadata and homepage messaging aligned. */
 
 export const siteTitle =
-  "hedwig — Encrypted one-time link · share a secret once";
+  "hedwig: Encrypted one-time link · share a secret once";
 
 export const siteDescription =
   "Create an encrypted one-time link: your secret is encrypted in the browser, shared once with optional burn-after-read and expiry. The server never sees your plaintext.";

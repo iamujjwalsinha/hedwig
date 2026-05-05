@@ -159,7 +159,7 @@ export default function SecretForm() {
               value={plaintext}
               onChange={(e) => { setPlaintext(e.target.value); if (error) setError(""); }}
               rows={7}
-              placeholder="Paste your secret here — passwords, tokens, private notes..."
+              placeholder="Paste your secret here: passwords, tokens, private notes..."
               style={{
                 width: "100%",
                 backgroundColor: BG,
@@ -327,7 +327,7 @@ export default function SecretForm() {
           <div style={{ backgroundColor: BG, border: `1px solid ${BORDER}`, borderRadius: "10px", padding: "14px 16px" }} className="space-y-2">
             {[
               ["Expires in", ttlLabel],
-              ["Burn after reading", burnOnRead ? "Yes — deleted on first view" : "No"],
+              ["Burn after reading", burnOnRead ? "Yes, deleted on first view" : "No"],
               ["Encryption", "AES-GCM 256-bit (browser-only)"],
             ].map(([label, value]) => (
               <div key={label} className="flex justify-between text-sm">
@@ -385,7 +385,7 @@ export default function SecretForm() {
               hedwig is on the way
             </h2>
             <p className="text-sm" style={{ color: TEXT, opacity: 0.55 }}>
-              Your secret is sealed. Share the link below — the decryption key lives only in the <code style={{ color: GREEN }}>#fragment</code>, never on hedwig&apos;s servers.
+              Your secret is sealed. Share the link below. The decryption key lives only in the <code style={{ color: GREEN }}>#fragment</code>, never on hedwig&apos;s servers.
             </p>
           </div>
 
