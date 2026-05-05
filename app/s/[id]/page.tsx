@@ -1,5 +1,17 @@
+import type { Metadata } from "next";
 import SecretViewer from "@/components/SecretViewer";
 import { BRAND, fontDisplay } from "@/lib/brand";
+
+export function generateMetadata(): Metadata {
+  return {
+    title: "Open link",
+    robots: {
+      index: false,
+      follow: false,
+      googleBot: { index: false, follow: false },
+    },
+  };
+}
 
 export default function SecretPage({ params }: { params: { id: string } }) {
   return (

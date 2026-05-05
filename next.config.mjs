@@ -3,8 +3,10 @@ const isProd = process.env.NODE_ENV === "production";
 
 const cspParts = [
   "default-src 'self'",
+  // Next.js emits inline bootstrap/hydration scripts; script-src 'self' alone blocks them
+  // and leaves the app non-interactive in production.
   isProd
-    ? "script-src 'self'"
+    ? "script-src 'self' 'unsafe-inline'"
     : "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",

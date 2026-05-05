@@ -2,7 +2,8 @@
 
 export const BRAND = {
   name: "hedwig",
-  tagline: "Zero-knowledge secret sharing. Encrypted in your browser.",
+  tagline:
+    "Share a secret once with an encrypted one-time link — burned after reading if you want.",
   accent: "#034F46",
   background: "#FFFFEB",
   cardBg: "#F4F4E0",

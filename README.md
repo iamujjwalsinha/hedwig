@@ -16,9 +16,11 @@ Production: set `NEXT_PUBLIC_SITE_URL` for canonical/OG metadata (see `.env.exam
 
 ## Vercel
 
-**Production:** [hedwig-phi.vercel.app](https://hedwig-phi.vercel.app) (from the [hedwig](https://github.com/iamujjwalsinha/hedwig) project on Vercel).
+**Project (dashboard):** [hedwig on Vercel](https://vercel.com/ujjwal-sinhas-projects-1422be6b/hedwig).
 
-In the Vercel project, add the same variables as `.env.example` (**Production** and **Preview** as needed). Set **`NEXT_PUBLIC_SITE_URL`** to your public origin (e.g. `https://hedwig-phi.vercel.app`) so Open Graph / canonical URLs resolve correctly.
+**Production:** [www.hedwig.app](https://www.hedwig.app). In that project, add the same variables as `.env.example` (**Production** and **Preview** as needed). Set **`NEXT_PUBLIC_SITE_URL`** to your public origin (e.g. `https://www.hedwig.app`) so Open Graph / canonical URLs resolve correctly.
+
+Locally, `npx vercel link` targets this repo to the linked project (`.vercel/` is gitignored).
 
 If the site returns **401** and you only see a Vercel sign-in—open **Project → Settings → Deployment Protection** and turn protection **off** for Production (or protect **Preview** only). The hostname `hedwig.vercel.app` can point at a different project; always use the domain under your deployment’s **Domains**.
 

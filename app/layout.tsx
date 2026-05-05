@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { BRAND } from "@/lib/brand";
+import {
+  metadataKeywords,
+  ogImagePath,
+  siteDescription,
+  siteTitle,
+} from "@/lib/seo";
 
 function metadataBase(): URL | undefined {
   const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
@@ -15,25 +21,44 @@ function metadataBase(): URL | undefined {
 
 const siteMetadataBase = metadataBase();
 
-const title = "hedwig — Zero-Knowledge Secret Sharing";
-const description =
-  "Share secrets securely. End-to-end encrypted in your browser. hedwig never sees your plaintext.";
+const openGraphExtras = siteMetadataBase
+  ? {
+      url: siteMetadataBase.href,
+      images: [
+        {
+          url: ogImagePath,
+          width: 1200,
+          height: 630,
+          alt: "hedwig — encrypted one-time link to share a secret once",
+        },
+      ],
+    }
+  : {};
+
+const twitterExtras = siteMetadataBase
+  ? {
+      images: [ogImagePath],
+    }
+  : {};
 
 export const metadata: Metadata = {
   ...(siteMetadataBase ? { metadataBase: siteMetadataBase } : {}),
-  title: { default: title, template: "%s · hedwig" },
-  description,
+  title: { default: siteTitle, template: "%s · hedwig" },
+  description: siteDescription,
+  keywords: metadataKeywords,
   robots: { index: true, follow: true },
   openGraph: {
-    title,
-    description,
+    title: siteTitle,
+    description: siteDescription,
     siteName: "hedwig",
     type: "website",
+    ...openGraphExtras,
   },
   twitter: {
     card: "summary_large_image",
-    title,
-    description,
+    title: siteTitle,
+    description: siteDescription,
+    ...twitterExtras,
   },
 };
 
